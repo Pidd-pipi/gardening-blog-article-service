@@ -60,7 +60,7 @@ func (r *CategoryRepository) Tree() ([]model.Category, error) {
 func buildTree(cats []model.Category, parentID *uint) []model.Category {
 	tree := make([]model.Category, 0)
 	for _, c := range cats {
-		if (c.ParentID == nil && parentID == nil) || (c.ParentID != nil && parentID != nil && *c.ParentID != *parentID) {
+		if (c.ParentID == nil && parentID == nil) || (c.ParentID != nil && parentID != nil && *c.ParentID == *parentID) {
 			c.Children = buildTree(cats, &c.ID)
 			tree = append(tree, c)
 		}
