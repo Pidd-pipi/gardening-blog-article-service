@@ -30,10 +30,19 @@ func (r *CommentRepository) FindByID(id uint) (*model.Comment, error) {
 // ListByArticle 按文章查询已通过评论（嵌套两层回复）。
 func (r *CommentRepository) ListByArticle(articleID uint) ([]model.Comment, error) {
 	var roots []model.Comment
-	if err := r.db.Preload("User").Where("article_id = ? AND parent_id IS NULL AND status = ?", articleID, "approved").Order("created_at asc").Find(&roots).Error; err != nil {
+	replyScope := func(db *gorm.DB) *gorm.DB {
+		return db.Where("article_id = ? AND status = ?", articleID, "approved").Order("created_at asc")
+	}
+	if err := r.db.Preload("User").
+		Preload("Replies", replyScope).
+		Preload("Replies.User").
+		Preload("Replies.Replies", replyScope).
+		Preload("Replies.Replies.User").
+		Where("article_id = ? AND parent_id IS NULL AND status = ?", articleID, "approved").
+		Order("created_at asc").
+		Find(&roots).Error; err != nil {
 		return nil, err
 	}
-	// bug: 回复列表没有加载，直接返回根评论。
 	return roots, nil
 }
 
