@@ -154,7 +154,7 @@ func (r *ArticleRepository) SumWordCount() (int64, error) {
 // Search 全文搜索（标题/摘要/正文），按相关度排序。
 func (r *ArticleRepository) Search(keyword string, page, pageSize int) ([]model.Article, int64, error) {
 	like := "%" + keyword + "%"
-	q := r.db.Model(&model.Article{}).Where("status = ? AND (LOWER(title) LIKE LOWER(?) OR LOWER(summary) LIKE LOWER(?) OR LOWER(content_markdown) LIKE LOWER(?))", "published", like, like, like)
+	q := r.db.Model(&model.Article{}).Where("status = ? AND LOWER(title) LIKE LOWER(?)", "published", like)
 	var total int64
 	if err := q.Count(&total).Error; err != nil {
 		return nil, 0, err
@@ -162,7 +162,7 @@ func (r *ArticleRepository) Search(keyword string, page, pageSize int) ([]model.
 	var items []model.Article
 	err := r.db.Preload("User").Preload("Category").Preload("Tags").
 		Where("articles.status = ?", "published").
-		Where("(LOWER(articles.title) LIKE LOWER(?) OR LOWER(articles.summary) LIKE LOWER(?) OR LOWER(articles.content_markdown) LIKE LOWER(?))", like, like, like).
+		Where("LOWER(articles.title) LIKE LOWER(?)", like).
 		Order("published_at desc").
 		Offset((page - 1) * pageSize).Limit(pageSize).Find(&items).Error
 	return items, total, err
