@@ -75,7 +75,7 @@ func (r *ArticleRepository) ListPublished(categoryID, tagID *uint, keyword strin
 		return q
 	}
 	var total int64
-	if err := query(r.db).Count(&total).Error; err != nil {
+	if err := r.db.Model(&model.Article{}).Where("articles.status = ?", "published").Count(&total).Error; err != nil {
 		return nil, 0, err
 	}
 	var items []model.Article
