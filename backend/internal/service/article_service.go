@@ -189,6 +189,11 @@ func (s *ArticleService) GetByID(ctx context.Context, id uint) (*model.Article, 
 
 // ListPublished 前台列表。
 func (s *ArticleService) ListPublished(ctx context.Context, categoryID, tagID *uint, keyword string, page, pageSize int) ([]model.Article, int64, error) {
+	if tagID != nil {
+		if _, err := s.tagRepo.FindByID(*tagID); err != nil {
+			return nil, 0, util.NotFoundError(constants.MsgTagNotFoundInList, err)
+		}
+	}
 	return s.repo.ListPublished(categoryID, tagID, keyword, page, pageSize)
 }
 

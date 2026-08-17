@@ -57,6 +57,14 @@ func (r *TagRepository) Update(t *model.Tag) error { return r.db.Save(t).Error }
 
 func (r *TagRepository) Delete(id uint) error { return r.db.Delete(&model.Tag{}, id).Error }
 
+func (r *TagRepository) CountByID(id uint) (int64, error) {
+	var count int64
+	if err := r.db.Model(&model.Tag{}).Where("id = ?", id).Count(&count).Error; err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
 func (r *TagRepository) Count() (int64, error) {
 	var count int64
 	err := r.db.Model(&model.Tag{}).Count(&count).Error

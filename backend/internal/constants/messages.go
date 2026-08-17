@@ -20,6 +20,7 @@ const (
 	MsgArticleNotFound   = "文章（Article）不存在"
 	MsgCategoryNotFound  = "分类（Category）不存在"
 	MsgTagNotFound       = "标签（Tag）不存在"
+	MsgTagNotFoundInList = "文章列表中的标签（Tag）不存在"
 	MsgSlugConflict      = "别名（slug）已存在"
 	MsgCommentNotFound   = "评论（Comment）不存在"
 	MsgInternalError     = "服务内部错误"
