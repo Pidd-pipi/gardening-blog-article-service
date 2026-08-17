@@ -1,0 +1,18 @@
+# gb-50-1__002
+
+## 标准命令
+
+```bash
+cd backend
+go build ./...     # 编译
+cd backend
+go run ./cmd/app   # 启动（如项目可运行）
+cd backend
+go test ./...      # 测试（如有）
+```
+
+## 环境
+
+- 基础镜像: golang:1.22
+- 依赖已在镜像构建阶段预下载，容器内离线可用。
+- 代码目录: /app/backend
