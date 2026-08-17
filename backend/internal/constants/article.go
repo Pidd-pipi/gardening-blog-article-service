@@ -7,5 +7,8 @@ const (
 	ArticleScheduled = "scheduled" // 定时发布
 )
 
+// MaxArticleTags 单篇文章最多可绑定标签数。
+const MaxArticleTags = 20
+
 // ArticleStatuses 全部文章状态。
 var ArticleStatuses = []string{ArticleDraft, ArticlePublished, ArticleScheduled}

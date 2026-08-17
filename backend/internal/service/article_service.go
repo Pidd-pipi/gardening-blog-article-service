@@ -48,6 +48,10 @@ type ArticleInput struct {
 
 // Create 创建文章（草稿或发布）。
 func (s *ArticleService) Create(ctx context.Context, userID uint, input ArticleInput) (*model.Article, error) {
+	input.TagIDs = util.UniqueUints(input.TagIDs)
+	if len(input.TagIDs) > constants.MaxArticleTags {
+		return nil, util.BadRequest("文章标签（ArticleInput.tag_ids）数量超限", errors.New("too many tag ids"))
+	}
 	if err := s.validateSlug(input.Slug, 0); err != nil {
 		return nil, err
 	}
@@ -85,6 +89,10 @@ func (s *ArticleService) Create(ctx context.Context, userID uint, input ArticleI
 
 // Update 更新文章。
 func (s *ArticleService) Update(ctx context.Context, id uint, input ArticleInput) (*model.Article, error) {
+	input.TagIDs = util.UniqueUints(input.TagIDs)
+	if len(input.TagIDs) > constants.MaxArticleTags {
+		return nil, util.BadRequest("文章标签（ArticleInput.tag_ids）数量超限", errors.New("too many tag ids"))
+	}
 	if err := s.validateSlug(input.Slug, id); err != nil {
 		return nil, err
 	}

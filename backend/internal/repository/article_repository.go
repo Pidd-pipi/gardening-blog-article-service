@@ -108,6 +108,7 @@ func (r *ArticleRepository) Update(a *model.Article) error { return r.db.Save(a)
 
 // ReplaceTags 替换文章标签关联。
 func (r *ArticleRepository) ReplaceTags(articleID uint, tagIDs []uint) error {
+	tagIDs = util.UniqueUints(tagIDs)
 	if err := r.db.Where("article_id = ?", articleID).Delete(&model.ArticleTag{}).Error; err != nil {
 		return err
 	}
