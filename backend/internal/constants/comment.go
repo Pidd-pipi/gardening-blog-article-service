@@ -7,5 +7,8 @@ const (
 	CommentDeleted  = "deleted"  // 已删除
 )
 
+// MaxReplyDepth 评论最多支持两层嵌套回复。
+const MaxReplyDepth = 2
+
 // CommentStatuses 全部评论状态。
 var CommentStatuses = []string{CommentPending, CommentApproved, CommentDeleted}

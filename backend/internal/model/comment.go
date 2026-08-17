@@ -5,8 +5,8 @@ import "time"
 // Comment 评论（最多三层嵌套回复）。
 type Comment struct {
 	ID        uint      `gorm:"primaryKey" json:"id"`
-	ArticleID uint      `gorm:"index;not null" json:"article_id"`
-	ParentID  *uint     `gorm:"index" json:"parent_id"`
+	ArticleID uint      `gorm:"index:idx_comment_article_parent;not null" json:"article_id"`
+	ParentID  *uint     `gorm:"index:idx_comment_article_parent" json:"parent_id"`
 	UserID    *uint     `gorm:"index" json:"user_id"`
 	Nickname  string    `gorm:"size:50" json:"nickname"`
 	Email     string    `gorm:"size:100" json:"email"`

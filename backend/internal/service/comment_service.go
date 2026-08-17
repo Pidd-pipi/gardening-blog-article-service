@@ -34,6 +34,12 @@ type CommentInput struct {
 
 // Create 提交评论（游客默认待审核；登录用户直接通过）。
 func (s *CommentService) Create(ctx context.Context, userID *uint, input CommentInput) (*model.Comment, error) {
+	if input.ParentID != nil {
+		parent, err := s.repo.FindByID(*input.ParentID)
+		if err != nil || parent.ArticleID != input.ArticleID {
+			return nil, util.BadRequest("父评论（Comment.parent_id）不合法", errors.New("invalid parent comment"))
+		}
+	}
 	status := constants.CommentPending
 	if userID != nil {
 		status = constants.CommentApproved

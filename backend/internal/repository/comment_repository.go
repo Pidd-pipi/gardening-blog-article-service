@@ -33,7 +33,13 @@ func (r *CommentRepository) ListByArticle(articleID uint) ([]model.Comment, erro
 	if err := r.db.Preload("User").Where("article_id = ? AND parent_id IS NULL AND status = ?", articleID, "approved").Order("created_at asc").Find(&roots).Error; err != nil {
 		return nil, err
 	}
-	// bug: 回复列表没有加载，直接返回根评论。
+	for i := range roots {
+		var replies []model.Comment
+		if err := r.db.Preload("User").Where("article_id = ? AND parent_id = ? AND status = ?", articleID, roots[i].ID, "approved").Order("created_at asc").Find(&replies).Error; err != nil {
+			return nil, err
+		}
+		roots[i].Replies = replies
+	}
 	return roots, nil
 }
 
