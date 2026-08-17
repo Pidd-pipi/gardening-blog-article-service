@@ -25,6 +25,11 @@ func NewCategoryService(repo *repository.CategoryRepository, log *slog.Logger) *
 
 // Create 创建分类。
 func (s *CategoryService) Create(ctx context.Context, c *model.Category) (*model.Category, error) {
+	if c.ParentID != nil {
+		if _, err := s.repo.FindByID(*c.ParentID); err != nil {
+			return nil, util.NotFoundError(constants.MsgParentCategoryNotFound, err)
+		}
+	}
 	exists, err := s.repo.ExistsBySlug(c.Slug, 0)
 	if err != nil {
 		return nil, err

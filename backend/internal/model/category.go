@@ -11,5 +11,6 @@ type Category struct {
 	Description string    `gorm:"size:300" json:"description"`
 	SortOrder   int       `json:"sort_order"`
 	CreatedAt   time.Time `json:"created_at"`
+	Parent      *Category  `gorm:"foreignKey:ParentID" json:"parent,omitempty"`
 	Children    []Category `gorm:"foreignKey:ParentID" json:"children,omitempty"`
 }

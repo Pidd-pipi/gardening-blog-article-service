@@ -19,6 +19,7 @@ const (
 	MsgRoleForbidden     = "当前角色（UserRole）无权执行该操作"
 	MsgArticleNotFound   = "文章（Article）不存在"
 	MsgCategoryNotFound  = "分类（Category）不存在"
+	MsgParentCategoryNotFound = "父分类（Category.parent_id）不存在"
 	MsgTagNotFound       = "标签（Tag）不存在"
 	MsgSlugConflict      = "别名（slug）已存在"
 	MsgCommentNotFound   = "评论（Comment）不存在"
