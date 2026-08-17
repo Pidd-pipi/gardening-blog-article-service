@@ -2,6 +2,11 @@ package util
 
 import "strings"
 
+// NormalizeKeyword 规整搜索关键词。
+func NormalizeKeyword(keyword string) string {
+	return strings.TrimSpace(strings.ToLower(keyword))
+}
+
 // ScoreMatch 关键词匹配评分（标题命中 > 摘要命中 > 正文命中）。
 func ScoreMatch(title, summary, content, keyword string) int {
 	kw := strings.ToLower(keyword)

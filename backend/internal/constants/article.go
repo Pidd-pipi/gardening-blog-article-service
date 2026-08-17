@@ -7,5 +7,8 @@ const (
 	ArticleScheduled = "scheduled" // 定时发布
 )
 
+// MaxSearchKeywordLen 搜索关键词最大长度。
+const MaxSearchKeywordLen = 64
+
 // ArticleStatuses 全部文章状态。
 var ArticleStatuses = []string{ArticleDraft, ArticlePublished, ArticleScheduled}

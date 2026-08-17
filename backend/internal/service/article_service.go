@@ -199,6 +199,10 @@ func (s *ArticleService) ListAll(ctx context.Context, status string, page, pageS
 
 // Search 全文搜索。
 func (s *ArticleService) Search(ctx context.Context, keyword string, page, pageSize int) ([]model.Article, int64, error) {
+	keyword = util.NormalizeKeyword(keyword)
+	if len(keyword) > constants.MaxSearchKeywordLen {
+		return nil, 0, util.BadRequest("搜索关键词（keyword）过长", errors.New("search keyword too long"))
+	}
 	s.log.InfoContext(ctx, constants.LOG_ARTICLE_SEARCHED, "keyword", keyword)
 	return s.repo.Search(keyword, page, pageSize)
 }
