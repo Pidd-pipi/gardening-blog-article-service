@@ -1,4 +1,4 @@
-# gardening-blog-article-service
+# gb-50-1__001
 
 ## 标准命令
 
