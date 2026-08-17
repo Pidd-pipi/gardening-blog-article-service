@@ -107,11 +107,17 @@ func (r *ArticleRepository) ListAll(status string, page, pageSize int) ([]model.
 func (r *ArticleRepository) Update(a *model.Article) error { return r.db.Save(a).Error }
 
 // ReplaceTags 替换文章标签关联。
+// 对 tagIDs 去重后再写入，避免同一 (article_id, tag_id) 复合主键冲突导致整次保存回滚。
 func (r *ArticleRepository) ReplaceTags(articleID uint, tagIDs []uint) error {
 	if err := r.db.Where("article_id = ?", articleID).Delete(&model.ArticleTag{}).Error; err != nil {
 		return err
 	}
+	seen := make(map[uint]struct{}, len(tagIDs))
 	for _, tid := range tagIDs {
+		if _, ok := seen[tid]; ok {
+			continue
+		}
+		seen[tid] = struct{}{}
 		if err := r.db.Create(&model.ArticleTag{ArticleID: articleID, TagID: tid}).Error; err != nil {
 			return err
 		}
